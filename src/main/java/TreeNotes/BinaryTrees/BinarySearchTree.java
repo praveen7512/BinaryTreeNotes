@@ -2,6 +2,8 @@ package TreeNotes.BinaryTrees;
 
 public class BinarySearchTree {
 
+    static int count;
+
     static class TreeNode {
 
         int val;
@@ -32,7 +34,7 @@ public class BinarySearchTree {
         //   2   6
         //  / \ / \
         // 1  3 5  7
-        System.out.println(isBST(root,Integer.MIN_VALUE, Integer.MAX_VALUE));
+        System.out.println(kthSmallestInBST(root, 2));
 
     }
 
@@ -95,4 +97,23 @@ public class BinarySearchTree {
 
 
     }
+
+    public static int kthSmallestInBST(TreeNode root, int k) {
+        if(root==null || k==0) return -1;
+
+        int left = kthSmallestInBST(root.left,k);
+        if (left!=-1) {
+           return left;
+        }
+        count++;
+
+        if(k==count) return root.val;
+
+        int right = kthSmallestInBST(root.right,k);
+
+        return right;
+
+    }
+
+
 }
