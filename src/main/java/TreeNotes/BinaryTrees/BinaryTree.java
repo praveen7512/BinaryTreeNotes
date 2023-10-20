@@ -30,20 +30,27 @@ public class BinaryTree {
     public static void main(String[] args) {
         Node node1 = new Node(10);
         Node node2 = new Node(11);
-        Node node3 = new Node(12);
-        Node node4 = new Node(12);
-        Node node5 = new Node(12);
+        Node node3 = new Node(13);
+        Node node4 = new Node(14);
+        Node node5 = new Node(15);
+        Node node6 = new Node(16);
+        Node node7 = new Node(17);
 
         node1.left = node2;
         node1.right = node3;
         node2.right = node5;
         node2.left = node4;
+        node5.right = node6;
+        node5.left = node7;
 
-        //  10
-        //   /  \
-        //  11   12
-        // / \
-        //12  12
+//                 10
+//                /  \
+//               11   13
+//              / \
+//             14  15
+//                / \
+//               17  16
+
 
 //        List<List<Integer>> list = new ArrayList<>();
 ////        averageLevel(node1, list).forEach(System.out::println);
@@ -241,7 +248,8 @@ public class BinaryTree {
         }
 
         Queue<NodeWithLevel> queue = new LinkedList();
-        HashMap<Integer, Node> hm = new LinkedHashMap<>();
+        List<List<Integer>> list = new ArrayList<>();
+        HashMap<Integer, List<Integer>> hm = new LinkedHashMap<>();
         queue.offer(new NodeWithLevel(root, 0));
 
         while (!queue.isEmpty()) {
@@ -249,23 +257,43 @@ public class BinaryTree {
             NodeWithLevel curr = queue.poll();
             int curr_level = curr.level;
 
-            if (!hm.containsKey(curr.level)) {
-                hm.put(curr.level, curr.node);
 
-            }
+                List<Integer> ls=   hm.getOrDefault(curr.level,new ArrayList<>());
+                ls.add(curr.node.data);
+                list.add(ls);
+                hm.put(curr.level,ls);
+
+
 
             if (curr.node.left != null) queue.add(new NodeWithLevel(curr.node.left, curr_level - 1));
             if (curr.node.right != null) queue.add(new NodeWithLevel(curr.node.right, curr_level + 1));
 
         }
 
-        for (Node i : hm.values()) {
-            System.out.printf(i.data + " ");
-        }
+        removeDuplicates(list).forEach(System.out::println);
+
+
 
     }
+    public static List<List<Integer>> removeDuplicates(List<List<Integer>> listOfLists) {
+        // Create a set of hash codes for the inner lists
+        HashSet<List<Integer>> set = new HashSet<>();
 
+        // Create a new list to store unique inner lists
+        List<List<Integer>> uniqueList = new ArrayList<>();
 
+        for (List<Integer> innerList : listOfLists) {
+            // Calculate a hash code for the inner list based on its elements
+            int hashCode = innerList.hashCode();
+
+            // If the hash code is not in the set, add the inner list to the unique list
+            if (set.add(innerList)) {
+                uniqueList.add(innerList);
+            }
+        }
+
+        return uniqueList;
+    }
 
 
 }
