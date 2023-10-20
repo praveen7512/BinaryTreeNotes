@@ -32,11 +32,19 @@ public class BinarySearchTree {
         //   2   6
         //  / \ / \
         // 1  3 5  7
-        insertInBST(root, 8);
-        searchInBST(root,8);
+        System.out.println(isBST(root,Integer.MIN_VALUE, Integer.MAX_VALUE));
 
     }
 
+
+    public static void printBST(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        printBST(root.left);
+        System.out.print(root.val + " ");
+        printBST(root.right);
+    }
 
     public static void searchInBST(TreeNode root, int target) {
         if (root == null) {
@@ -62,12 +70,29 @@ public class BinarySearchTree {
     }
 
 
-    public static void printBST(TreeNode root) {
-        if (root == null) {
-            return;
+    public static int floorInBST(TreeNode root, int element) {
+
+        if (root == null) return -1;
+        int ans = -1;
+        while (root != null) {
+            if (root.val == element) return element;
+            if (root.val > element) root = root.left;
+            if (root.val < element) {
+                ans = root.val;
+                root = root.right;
+            }
         }
-        printBST(root.left);
-        System.out.print(root.val + " ");
-        printBST(root.right);
+        return ans;
+    }
+
+    public static boolean isBST(TreeNode root, int min, int max) {
+
+        if (root == null) return true;
+
+        if (root.val < min || root.val > max) return false;
+
+        return isBST(root.left, min, root.val) && isBST(root.right, root.val, max);
+
+
     }
 }
