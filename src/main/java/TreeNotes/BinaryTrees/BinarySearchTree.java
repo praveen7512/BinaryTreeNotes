@@ -34,7 +34,7 @@ public class BinarySearchTree {
         //   2   6
         //  / \ / \
         // 1  3 5  7
-        System.out.println(kthSmallestInBST(root, 2));
+        System.out.println(lowestCommonAncestor(root, root.left.left, root.left.right).val);
 
     }
 
@@ -99,21 +99,44 @@ public class BinarySearchTree {
     }
 
     public static int kthSmallestInBST(TreeNode root, int k) {
-        if(root==null || k==0) return -1;
+        if (root == null || k == 0) return -1;
 
-        int left = kthSmallestInBST(root.left,k);
-        if (left!=-1) {
-           return left;
+        int left = kthSmallestInBST(root.left, k);
+        if (left != -1) {
+            return left;
         }
         count++;
 
-        if(k==count) return root.val;
+        if (k == count) return root.val;
 
-        int right = kthSmallestInBST(root.right,k);
+        int right = kthSmallestInBST(root.right, k);
 
         return right;
 
     }
 
+    public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+        if (root == null) {
+            return null;
+        }
+
+        if (root.val == p.val || root.val == q.val) {
+            return root;
+        }
+
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if (left != null && right != null) {
+            return root;
+        }
+
+        if (left != null && right == null) return left;
+        else if (left == null && right != null) return right;
+        else return null;
+
+
+    }
 
 }
