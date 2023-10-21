@@ -1,4 +1,4 @@
-package TreeNotes.BinaryTrees;
+package BinarySearchTree;
 
 public class BinarySearchTree {
 
@@ -34,7 +34,7 @@ public class BinarySearchTree {
         //   2   6
         //  / \ / \
         // 1  3 5  7
-        System.out.println(lowestCommonAncestor(root, root.left.left, root.left.right).val);
+        System.out.println(inorderSuccesor(root, 1));
 
     }
 
@@ -121,22 +121,32 @@ public class BinarySearchTree {
             return null;
         }
 
-        if (root.val == p.val || root.val == q.val) {
-            return root;
-        }
+        if (root.val == p.val || root.val == q.val) return root;
 
         TreeNode left = lowestCommonAncestor(root.left, p, q);
         TreeNode right = lowestCommonAncestor(root.right, p, q);
 
-        if (left != null && right != null) {
-            return root;
-        }
-
+        if (left != null && right != null) return root;
+        if (left == null && right != null) return right;
         if (left != null && right == null) return left;
-        else if (left == null && right != null) return right;
         else return null;
 
 
     }
 
+    public static int inorderSuccesor(TreeNode root, int element) {
+
+        if (root == null) {
+            return -1;
+        }
+
+        int left = inorderSuccesor(root.left, element);
+        if (element < root.val) return root.val;
+        int right = inorderSuccesor(root.right, element);
+
+        if(left!=-1) return left;
+        else return right;
+
+
+    }
 }
