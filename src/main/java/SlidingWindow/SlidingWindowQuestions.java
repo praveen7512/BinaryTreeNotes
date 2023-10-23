@@ -1,5 +1,6 @@
 package SlidingWindow;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +10,10 @@ public class SlidingWindowQuestions {
 
     public static void main(String[] args) {
 
-        System.out.println(containPermutation("ab", "afbjskdlabfha"));
+        int[] arr ={-1,-2};
+        int k=1;
+        System.out.println(findMaxAverage(arr, k));
+
 
     }
 
@@ -96,6 +100,24 @@ public class SlidingWindowQuestions {
 
 
     }
+    public static double findMaxAverage(int[] nums, int k) {
+        Double maxAverage =-100.00;
+        double currWindowAvg=0;
+        for (int i = 0; i <k ; i++) {
+            currWindowAvg = currWindowAvg + nums[i];
+        }
+
+        maxAverage = Math.max(maxAverage,currWindowAvg/k);
+
+        for (int i = k; i < nums.length ; i++) {
+            currWindowAvg =(currWindowAvg-nums[i-k]+nums[i]);
+            maxAverage= Math.max(maxAverage,currWindowAvg/k);
+        }
+        return maxAverage;
+
+    }
+
+
 
 
 }
