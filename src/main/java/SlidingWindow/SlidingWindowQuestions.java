@@ -1,8 +1,7 @@
 package SlidingWindow;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 
 public class SlidingWindowQuestions {
@@ -10,11 +9,7 @@ public class SlidingWindowQuestions {
 
     public static void main(String[] args) {
 
-        int[] arr ={-1,-2};
-        int k=1;
-        System.out.println(findMaxAverage(arr, k));
-
-
+        System.out.println(repeatedStringMatch("a", "aa"));
     }
 
 
@@ -82,7 +77,7 @@ public class SlidingWindowQuestions {
     }
 
     public static boolean containPermutation(String s1, String s2) {
-        if(s1.length()>s2.length()) return false;
+        if (s1.length() > s2.length()) return false;
         StringBuilder window = new StringBuilder("");
 
         for (int i = 0; i < s1.length(); i++) {
@@ -97,27 +92,79 @@ public class SlidingWindowQuestions {
             if (isAnagram(window.toString(), s1)) return true;
         }
         return false;
-
-
     }
+
     public static double findMaxAverage(int[] nums, int k) {
-        Double maxAverage =-100.00;
-        double currWindowAvg=0;
-        for (int i = 0; i <k ; i++) {
+        Double maxAverage = -100.00;
+        double currWindowAvg = 0;
+        for (int i = 0; i < k; i++) {
             currWindowAvg = currWindowAvg + nums[i];
         }
 
-        maxAverage = Math.max(maxAverage,currWindowAvg/k);
+        maxAverage = Math.max(maxAverage, currWindowAvg / k);
 
-        for (int i = k; i < nums.length ; i++) {
-            currWindowAvg =(currWindowAvg-nums[i-k]+nums[i]);
-            maxAverage= Math.max(maxAverage,currWindowAvg/k);
+        for (int i = k; i < nums.length; i++) {
+            currWindowAvg = (currWindowAvg - nums[i - k] + nums[i]);
+            maxAverage = Math.max(maxAverage, currWindowAvg / k);
         }
         return maxAverage;
 
     }
 
+    public static int repeatedStringMatch(String a, String b) {
+        StringBuilder window = new StringBuilder("");
+        int ans = 0;
 
+        for (int i = 0; i < a.length(); i++) {
+            window.append(b.charAt(i));
+        }
+
+        if (a.equals(window.toString())) {
+            ans++;
+        }
+
+        for (int i = window.length(); i < b.length(); i++) {
+            window.deleteCharAt(0);
+            window.append(b.charAt(i));
+
+            if (a.equals(window.toString())) {
+                ans++;
+            }
+        }
+
+        return ans;
+    }
+
+
+    //Variable size window questions
+
+
+    public static int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) return -1;
+
+        int start = 0, end = 0;
+        int max_length = 0;
+        Set<Character> window = new HashSet<>();
+
+        while (end < s.length()) {
+            Character curr_character = s.charAt(end);
+
+            if (!window.contains(curr_character)) {
+                window.add(s.charAt(end));
+                end++;
+                max_length = Math.max(max_length, window.size());
+            } else {
+                window.remove(s.charAt(start));
+                start++;
+            }
+        }
+        return max_length;
+
+    }
 
 
 }
+
+
+
+
