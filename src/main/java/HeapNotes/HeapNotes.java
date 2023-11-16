@@ -1,5 +1,6 @@
 package HeapNotes;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class HeapNotes {
@@ -7,32 +8,12 @@ public class HeapNotes {
 
     public static void main(String[] args) {
 
-//        List<List<Integer>> nums = new ArrayList<>();
-//
-//        // Define some sorted arrays
-//        List<Integer> arr1 = Arrays.asList(1, 3, 5);
-//        List<Integer> arr2 = Arrays.asList(2, 4, 6);
-//        List<Integer> arr3 = Arrays.asList(0, 7, 8);
-//
-//        // Add the sorted arrays to the list
-//        nums.add(arr1);
-//        nums.add(arr2);
-//        nums.add(arr3);
-//
-//        int k = 3; // Number of arrays to merge
-//
-//        List<Integer> merged = mergeKSortedArrays(nums, k);
-//
-//        // Print the merged array
-//        System.out.println("Merged Array: " + merged);
+        int[][] points = {{3, 3}, {-2, 4}, {5, -1}};
+        int k = 2;
 
-        //Input: nums = [1,1,1,2,2,3], k = 2
-        //Output: [1,2]
-
-        int ans[] = topKFrequent(new int[]{1, 1, 1, 2, 2, 3}, 2);
-
-        System.out.println(Arrays.toString(ans));
-
+        for (int[] ints : kClosest(points, k)) {
+            System.out.println(Arrays.toString(ints));
+        }
     }
 
     public static int kthLargest(int[] heap_array, int k) {
@@ -141,14 +122,36 @@ public class HeapNotes {
 
         for (int i = 0; i < k; i++) {
             TopKFrequent curr = maxheap.poll();
-            ans[i] =(int) curr.value;
+            ans[i] = (int) curr.value;
         }
         return ans;
 
 
     }
 
+    public static String sortCharacterByFrequency(String s) {
 
+        HashMap<Character, Integer> hashMap = new HashMap<>();
+        PriorityQueue<TopKFrequent<Character>> maxheap = new PriorityQueue<>(Collections.reverseOrder());
+        StringBuilder ans = new StringBuilder("");
+
+        for (char i : s.toCharArray()) {
+            hashMap.put(i, hashMap.getOrDefault(i, 0) + 1);
+        }
+        hashMap.forEach((character, integer) -> {
+            maxheap.offer(new TopKFrequent<Character>(character, integer));
+        });
+
+        while (!maxheap.isEmpty()) {
+            TopKFrequent<Character> curr = maxheap.poll();
+            for (int i = 0; i < curr.frequency; i++) {
+                ans.append(curr.value);
+            }
+
+        }
+        return ans.toString();
+
+    }
 
     static class TopKFrequent<T> implements Comparable<TopKFrequent> {
         T value;
@@ -162,6 +165,56 @@ public class HeapNotes {
         @Override
         public int compareTo(TopKFrequent o) {
             return this.frequency - o.frequency;
+        }
+    }
+
+    public static boolean isSubWord(String input, String subword) {
+        int i = 0, j = 0;
+
+        while (i < input.length() && j < subword.length()) {
+            if (input.charAt(i) == subword.charAt(j)) {
+                j++;
+            }
+            i++;
+        }
+
+        return (j == subword.length());
+    }
+
+    public static int[][] kClosest(int[][] points, int k) {
+
+        PriorityQueue<KClosest> minHeap = new PriorityQueue<>();
+        int[][] ans = new int[k][2];
+
+        for (int[] point : points) {
+            int distance = 0;
+            for (int i : point) {
+                distance += i * i;
+            }
+            minHeap.offer(new KClosest(point, (distance)));
+        }
+
+        for (int i = 0; i < k; i++) {
+
+            ans[i] = minHeap.poll().list;
+        }
+
+        return ans;
+
+    }
+
+    static class KClosest implements Comparable<KClosest> {
+        int[] list;
+        int distance;
+
+        public KClosest(int[] list, int distance) {
+            this.list = list;
+            this.distance = distance;
+        }
+
+        @Override
+        public int compareTo(KClosest o) {
+            return this.distance - o.distance;
         }
     }
 
